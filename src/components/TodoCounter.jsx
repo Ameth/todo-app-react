@@ -1,5 +1,5 @@
-function TodoCounter() {
-  return <h2 className='text-2xl text-teal-500 font-bold my-2'>Completed 3 to 5</h2>
+function TodoCounter({total, completed}) {
+  return <h2 className='text-2xl text-teal-500 font-bold my-2'>Completed {completed} to {total}</h2>
 }
  
 export { TodoCounter }
