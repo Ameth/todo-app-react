@@ -32,12 +32,12 @@ function Todoitem({
           </p>
         )}
       </a>
-      <span
+      {!completed && <span
         className='absolute top-0 right-5 mx-1 my-1 p-1 cursor-pointer'
         title='Editar'
       >
         📝
-      </span>
+      </span>}
       <span
         className='absolute top-0 right-0 mx-1 my-1 p-1 cursor-pointer'
         onClick={onDelete}

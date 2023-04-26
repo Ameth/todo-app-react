@@ -4,7 +4,6 @@ import { TodoSearch } from '../components/TodoSearch'
 import { TodoList } from '../components/TodoList'
 import { CreateTodoButton } from '../components/CreateTodoButton'
 import { Todoitem } from '../components/Todoitem'
-// import './App.css'
 
 const mockTodos = [
   {
