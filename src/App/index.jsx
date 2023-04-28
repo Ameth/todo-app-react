@@ -4,6 +4,7 @@ import { TodoSearch } from '../components/TodoSearch'
 import { TodoList } from '../components/TodoList'
 import { CreateTodoButton } from '../components/CreateTodoButton'
 import { Todoitem } from '../components/Todoitem'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const mockTodos = [
   {
@@ -42,8 +43,9 @@ const mockTodos = [
 ]
 
 function App() {
-  const [todos, setTodos] = useState(mockTodos)
+  const [todos, saveTodos] = useLocalStorage('todos_local')
   const [searchValue, setSearchValue] = useState('')
+
   const completedTodos = todos.filter((todo) => todo.completed).length
   const filtredTodos =
     searchValue.length > 0
@@ -54,15 +56,15 @@ function App() {
 
   const toogleStateTodo = (value) => {
     const todoIndex = todos.findIndex((todo) => todo.text === value)
-    const newTodo = [...todos]
+    const newTodos = [...todos]
 
-    newTodo[todoIndex].completed = !newTodo[todoIndex].completed
-    setTodos(newTodo)
+    newTodos[todoIndex].completed = !newTodos[todoIndex].completed
+    saveTodos(newTodos)
   }
 
   const deleteTodo = (value) => {
-    const newTodos = todos.filter(todo => todo.text !== value)
-    setTodos(newTodos)
+    const newTodos = todos.filter((todo) => todo.text !== value)
+    saveTodos(newTodos)
   }
 
   return (
