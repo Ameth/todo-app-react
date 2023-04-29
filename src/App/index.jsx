@@ -70,6 +70,13 @@ function App() {
     saveTodos(newTodos)
   }
 
+  const addTodo = (value) => {
+    // console.log(value);
+    const newTodos = [...todos]
+    newTodos.push(value)
+    saveTodos(newTodos)
+  }
+
   const deleteTodo = (value) => {
     const newTodos = todos.filter((todo) => todo.text !== value)
     saveTodos(newTodos)
@@ -108,7 +115,9 @@ function App() {
       </TodoList>
       {showModal &&
         createPortal(
-          <Modal onClose={() => setShowModal(false)} />,
+          <Modal 
+            onClose={() => setShowModal(false)}
+            onAdd={addTodo} />,
           document.body
         )}
       <CreateTodoButton onShowModal={() => setShowModal(true)} />
