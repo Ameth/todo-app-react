@@ -1,10 +1,13 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { TodoCounter } from '../components/TodoCounter'
 import { TodoSearch } from '../components/TodoSearch'
 import { TodoList } from '../components/TodoList'
 import { CreateTodoButton } from '../components/CreateTodoButton'
 import { Todoitem } from '../components/Todoitem'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { Modal } from '../components/Modal'
+// import { TodoContext, TodoProvider } from '../context'
 
 const mockTodos = [
   {
@@ -43,8 +46,13 @@ const mockTodos = [
 ]
 
 function App() {
-  const [todos, saveTodos] = useLocalStorage('todos_local')
+  const {
+    item: todos,
+    saveItem: saveTodos,
+    loading,
+  } = useLocalStorage('todos_local')
   const [searchValue, setSearchValue] = useState('')
+  const [showModal, setShowModal] = useState(false)
 
   const completedTodos = todos.filter((todo) => todo.completed).length
   const filtredTodos =
@@ -73,26 +81,37 @@ function App() {
       <TodoCounter total={todos.length} completed={completedTodos} />
       <TodoSearch searchValue={searchValue} setSearchValue={setSearchValue} />
       <TodoList>
-        {filtredTodos.length > 0 ? (
-          filtredTodos.map((todo, index) => (
-            <Todoitem
-              key={index}
-              text={todo.text}
-              completed={todo.completed}
-              description={todo.description}
-              onComplete={() => toogleStateTodo(todo.text)}
-              onDelete={() => deleteTodo(todo.text)}
-            />
-          ))
-        ) : (
+        {loading && (
           <span className='text-white flex justify-center items-center p-0 m-0'>
-            {searchValue.length > 0
-              ? 'No existen coincidencias'
-              : 'No hay tareas todavia'}
+            Cargando listado...
           </span>
         )}
+        {!loading &&
+          (filtredTodos.length > 0 ? (
+            filtredTodos.map((todo, index) => (
+              <Todoitem
+                key={index}
+                text={todo.text}
+                completed={todo.completed}
+                description={todo.description}
+                onComplete={() => toogleStateTodo(todo.text)}
+                onDelete={() => deleteTodo(todo.text)}
+              />
+            ))
+          ) : (
+            <span className='text-white flex justify-center items-center p-0 m-0'>
+              {searchValue.length > 0
+                ? 'No existen coincidencias'
+                : 'No hay tareas todavia'}
+            </span>
+          ))}
       </TodoList>
-      <CreateTodoButton />
+      {showModal &&
+        createPortal(
+          <Modal onClose={() => setShowModal(false)} />,
+          document.body
+        )}
+      <CreateTodoButton onShowModal={() => setShowModal(true)} />
     </Fragment>
   )
 }
