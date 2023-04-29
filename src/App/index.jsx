@@ -4,9 +4,10 @@ import { TodoCounter } from '../components/TodoCounter'
 import { TodoSearch } from '../components/TodoSearch'
 import { TodoList } from '../components/TodoList'
 import { CreateTodoButton } from '../components/CreateTodoButton'
-import { Todoitem } from '../components/Todoitem'
+import { TodoItem } from '../components/TodoItem'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { Modal } from '../components/Modal'
+import Loader from '../components/Loader'
 // import { TodoContext, TodoProvider } from '../context'
 
 const mockTodos = [
@@ -82,21 +83,20 @@ function App() {
     saveTodos(newTodos)
   }
 
+  /* <span className='text-white flex justify-center items-center p-0 m-0'>
+            Cargando listado...
+          </span> */
   return (
     <Fragment>
       <h1 className='text-6xl text-white font-bold'>Your task</h1>
       <TodoCounter total={todos.length} completed={completedTodos} />
       <TodoSearch searchValue={searchValue} setSearchValue={setSearchValue} />
       <TodoList>
-        {loading && (
-          <span className='text-white flex justify-center items-center p-0 m-0'>
-            Cargando listado...
-          </span>
-        )}
+        {loading && <Loader />}
         {!loading &&
           (filtredTodos.length > 0 ? (
             filtredTodos.map((todo, index) => (
-              <Todoitem
+              <TodoItem
                 key={index}
                 text={todo.text}
                 completed={todo.completed}
@@ -115,9 +115,7 @@ function App() {
       </TodoList>
       {showModal &&
         createPortal(
-          <Modal 
-            onClose={() => setShowModal(false)}
-            onAdd={addTodo} />,
+          <Modal onClose={() => setShowModal(false)} onAdd={addTodo} />,
           document.body
         )}
       <CreateTodoButton onShowModal={() => setShowModal(true)} />

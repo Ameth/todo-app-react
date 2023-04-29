@@ -2,7 +2,7 @@ import React from 'react'
 
 // bg-gray-400 opacity-60
 
-function Todoitem({
+function TodoItem({
   text,
   completed,
   description = null,
@@ -49,4 +49,4 @@ function Todoitem({
   )
 }
 
-export { Todoitem }
+export { TodoItem }
